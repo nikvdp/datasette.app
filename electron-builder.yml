@@ -3,17 +3,18 @@ productName: datasette-app
 copyright: Copyright © 2021
 
 files:
-  - build/**/*
-  - package.json
-  - node_modules/**/*
-  - "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}"
-  - "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}"
-  - "!**/node_modules/*.d.ts"
-  - "!**/node_modules/.bin"
+  - "**/*"
+  - "!build/tmp/**/*"
+  # - package.json
+  # - node_modules/**/*
+  # - "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}"
+  # - "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}"
+  # - "!**/node_modules/*.d.ts"
+  # - "!**/node_modules/.bin"
 
 # external bins / other code which is not part of the dependency tree known to npm/electron.
 extraResources:
-  - "./build/datasette.bin"
+  - "./build/datasette-bundle/**/*"
 
 # macOS build settings. This configuration can be finicky due to code-signing,
 # entitlements
@@ -29,8 +30,8 @@ mac:
       Allow this permission if you would like to search your Documents folder.
     NSDownloadsFolderUsageDescription: >
       Allow this permission if you would like to search your Downloads folder.
-  binaries:
-    - build/datasette.bin
+  # binaries:
+  #   - build/datasette.bin
 
   target:
     - target: dmg

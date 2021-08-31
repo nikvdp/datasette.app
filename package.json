@@ -10,12 +10,6 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder"
   },
-  "build": {
-    "appId": "io.datasette.app",
-    "mac": {
-      "category": "public.app-category.developer-tools"
-    }
-  },
   "repository": "https://github.com/simonw/datasette.app",
   "keywords": [
     "Electron"
