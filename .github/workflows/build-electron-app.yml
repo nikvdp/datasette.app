@@ -48,7 +48,7 @@ jobs:
 
     - name: Store electron-builder artifact(s) 
       run: |
-        mkdir "$GITHUB_WORKSPACE/artifacts"
+        mkdir "$GITHUB_WORKSPACE/artifacts" || true
         cp dist/datasette-app-*.dmg "$GITHUB_WORKSPACE/artifacts/datasette.dmg"
 
     - name: Upload datasette bundle tarball as artifact
