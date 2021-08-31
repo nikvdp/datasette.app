@@ -1,0 +1,50 @@
+appId: datasette-app
+productName: datasette-app
+copyright: Copyright © 2021
+
+files:
+  - build/**/*
+  - package.json
+  - node_modules/**/*
+  - "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}"
+  - "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}"
+  - "!**/node_modules/*.d.ts"
+  - "!**/node_modules/.bin"
+
+# external bins / other code which is not part of the dependency tree known to npm/electron.
+extraResources:
+  - "./build/datasette.bin"
+
+# macOS build settings. This configuration can be finicky due to code-signing,
+# entitlements
+mac:
+  hardenedRuntime: true
+  entitlements: build/entitlements.mac.plist
+  entitlementsInherit: build/entitlements.mac.plist
+  # Extend the apps Info.plist
+  extendInfo:
+    NSDesktopFolderUsageDescription: >
+      Allow this permission if you would like to search your Desktop folder.
+    NSDocumentsFolderUsageDescription: >
+      Allow this permission if you would like to search your Documents folder.
+    NSDownloadsFolderUsageDescription: >
+      Allow this permission if you would like to search your Downloads folder.
+  binaries:
+    - build/datasette.bin
+
+  target:
+    - target: dmg
+      arch:
+        - x64
+  category: public.app-category.productivity
+
+# # see https://www.electron.build/configuration/win
+# win:
+#   target:
+#     - nsis
+
+# # see https://www.electron.build/configuration/linux
+# linux:
+#   target:
+#     - AppImage
+
