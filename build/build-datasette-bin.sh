@@ -50,26 +50,26 @@ main() {
     # break
     find "$bundle_work_dir" -type f -exec touch '{}' \;
 
-    install_warp
-
-    # create a minimal launcher script to allow warp to run datasette with the
-    # bundled python interpreter
-    cat > "${bundle_work_dir}/bin/launch.sh" <<'EOF'
-#!/bin/bash
-SCRIPT_DIR="$( cd "$( dirname "$0" )" && pwd )"
-exec "$SCRIPT_DIR/python" "$SCRIPT_DIR/datasette"
-EOF
-    chmod +x "${bundle_work_dir}/bin/launch.sh"
-    
-    echo "Creating single-file binary with warp"
-    # and finally create the single-file binary with warp
-    local warp_arch="$(uname | sed 's/Darwin/macos/' | sed 's/Linux/linux/')-x64"
-    ./warp-packer --arch "$warp_arch" \
-        --input_dir "$bundle_work_dir" \
-        --exec bin/launch.sh \
-        --output ./datasette.bin
-
-    store_github_artifact ./datasette.bin
+#     install_warp
+#
+#     # create a minimal launcher script to allow warp to run datasette with the
+#     # bundled python interpreter
+#     cat > "${bundle_work_dir}/bin/launch.sh" <<'EOF'
+# #!/bin/bash
+# SCRIPT_DIR="$( cd "$( dirname "$0" )" && pwd )"
+# exec "$SCRIPT_DIR/python" "$SCRIPT_DIR/datasette"
+# EOF
+#     chmod +x "${bundle_work_dir}/bin/launch.sh"
+#     
+#     echo "Creating single-file binary with warp"
+#     # and finally create the single-file binary with warp
+#     local warp_arch="$(uname | sed 's/Darwin/macos/' | sed 's/Linux/linux/')-x64"
+#     ./warp-packer --arch "$warp_arch" \
+#         --input_dir "$bundle_work_dir" \
+#         --exec bin/launch.sh \
+#         --output ./datasette.bin
+#
+#     store_github_artifact ./datasette.bin
 }
 
 install_warp() {
