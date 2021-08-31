@@ -32,14 +32,27 @@ jobs:
     - name: Build standalone datasette bundle 
       run: ./build/build-datasette-bin.sh
 
+    - name: Upload datasette bundle tarball as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: datasette-bundle-macos-x64.tar.gz
+        path: ./artifacts/datasette.tar.gz
+
     - name: Install Node dependencies
       run: npm install
 
     - name: Build electron app
-      run: npx electron-builder
+      run: |
+        export GH_TOKEN="${{secrets.GITHUB_TOKEN}}"
+        npx electron-builder
 
     - name: Store electron-builder artifact(s) 
       run: |
         mkdir "$GITHUB_WORKSPACE/artifacts"
-        cp dist/*.dmg "$GITHUB_WORKSPACE/artifacts"
+        cp dist/datasette-app-*.dmg "$GITHUB_WORKSPACE/artifacts/datasette.dmg"
 
+    - name: Upload datasette bundle tarball as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: datasette.dmg
+        path: ./artifacts/datasette.dmg
