@@ -46,6 +46,10 @@ main() {
     mkdir -p "$bundle_work_dir"
     tar -C "$bundle_work_dir" -xzf datasette.tar.gz
 
+    # make sure every file has a timestamp lest the codesign process 
+    # break
+    find "$bundle_work_dir" -type f -exec touch '{}' \;
+
     install_warp
 
     # create a minimal launcher script to allow warp to run datasette with the
