@@ -1,0 +1,45 @@
+on:
+  push:
+    branches: 
+    - main
+    # tags:
+    # - v*
+
+jobs:
+  macos:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Configure Node caching
+      uses: actions/cache@v2
+      env:
+        cache-name: cache-node-modules
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
+    - uses: actions/cache@v2
+      name: Configure pip caching
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
+    - name: Build standalone datasette bundle 
+      run: ./build/build-datasette-bin.sh
+
+    - name: Install Node dependencies
+      run: npm install
+
+    - name: Build electron app
+      run: npx electron-builder
+
+    - name: Store electron-builder artifact(s) 
+      run: |
+        mkdir "$GITHUB_WORKSPACE/artifacts"
+        cp dist/*.dmg "$GITHUB_WORKSPACE/artifacts"
+
