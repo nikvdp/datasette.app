@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+SCRIPT_DIR="$( cd "$( dirname "$0" )" && pwd )"
 
 # Build a self-contained single-file binary of datasette and all it's 
 # dependencies. 
@@ -36,16 +37,17 @@ main() {
     # use the excellent conda-pack to create a tarball containing a
     # self-contained and relocatable copy of the conda env with all
     # dependencies included 
-    conda-pack --name "$env_name" --output datasette.tar.gz
+    conda-pack --name "$env_name" --force --output datasette.tar.gz
     
     store_github_artifact datasette.tar.gz
 
     # since we want to create a single binary, re-extract the conda-pack 
     # tarball so that we can use warp to pack it up
-    local bundle_work_dir="./tmp/datasette-bundle"
+    local bundle_work_dir="${SCRIPT_DIR}/datasette-bundle"
     mkdir -p "$bundle_work_dir"
     tar -C "$bundle_work_dir" -xzf datasette.tar.gz
 
+    echo "Updating timestamps..."
     # make sure every file has a timestamp lest the codesign process 
     # break
     find "$bundle_work_dir" -type f -exec touch '{}' \;
