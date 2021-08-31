@@ -1,5 +1,21 @@
 #!/usr/bin/env bash
 
+# Build a self-contained single-file binary of datasette and all it's 
+# dependencies. 
+
+# Uses conda-pack [1] and dgiagio/warp [2] to create the binary instead of
+# pyinstaller because while the pyinstaller recipe listed here [3] does build a
+# runnable binary, using it to run the basic `select sqlite_version()` query
+# results in a 'jinja2.exceptions.UndefinedError: 'path_with_added_args' is
+# undefined' error. This is most likely due to pyinstaller's zipfile path
+# machinations and is probably fixable with strong enough pyinstaller-fu, but
+# since conda-pack + warp don't rely on python's zipfile support sidestepping
+# the issue seemed simpler.
+#
+# [1] https://conda.github.io/conda-pack/
+# [2] https://github.com/dgiagio/warp
+# [3] https://github.com/simonw/datasette/issues/93#issuecomment-754219002 
+
 main() {
     install_conda
     export PATH=$HOME/miniconda3/bin:$HOME/miniconda2/bin:$PATH
